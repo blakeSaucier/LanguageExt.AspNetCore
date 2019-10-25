@@ -14,5 +14,11 @@ namespace LanguageExt.AspNetCore
 
         public static Option<JsonResult> ToJsonResult<T>(this Option<T> option) =>
             option.Map(OkJson);
+
+        public static Task<Option<JsonResult>> ToJsonResult<T>(this Task<Option<T>> option) =>
+            option.Map(ToJsonResult);
+
+        public static Task<IActionResult> ToActionResult<T>(this OptionAsync<T> option) =>
+            option.Match(Ok, NotFound);
     }
 }
