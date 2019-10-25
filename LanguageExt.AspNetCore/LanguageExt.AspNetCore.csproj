@@ -1,7 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageVersion>0.0.1</PackageVersion>
+    <PackageId>LanguageExt.AspNetCore</PackageId>
+    <Authors>James Saucier</Authors>
+    <PackageTags>C#, Functional, Language Extension, Monad, Option, Either, List, Set, Map, Tuple</PackageTags>
+    <Summary>Useful extensions for LanguageExt with AspNetCore</Summary>
+    <PackageProjectUrl>https://github.com/blakeSaucier/LanguageExt.AspNetCore</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
