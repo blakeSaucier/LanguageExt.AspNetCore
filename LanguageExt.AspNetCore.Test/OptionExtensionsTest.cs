@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using LanguageExt;
+using System.Threading.Tasks;
 using static LanguageExt.Prelude;
 
 namespace LanguageExt.AspNetCore.Test
@@ -98,8 +94,8 @@ namespace LanguageExt.AspNetCore.Test
             Age = age;
         }
 
-        public string First { get; set; }
-        public string Last { get; set; }
-        public int Age { get; set; }
+        public string First { get; }
+        public string Last { get; }
+        public int Age { get; }
     }
 }
