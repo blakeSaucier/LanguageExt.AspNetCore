@@ -18,7 +18,7 @@ namespace LanguageExt.AspNetCore
         public static Task<IActionResult> ToActionResult<FAIL, SUCCESS>(this Validation<Task<FAIL>, SUCCESS> validation) =>
             validation.MatchAsync(
                 SuccAsync: a => Ok(a).AsTask(),
-                FailAsync: async e => BadRequest(await e.Sequence()));
+                FailAsync: async e => BadRequest(await e.SequenceParallel()));
 
         public static JsonResult ToJsonResult<FAIL, SUCCESS>(this Validation<FAIL, SUCCESS> validation) =>
             validation.Match(OkJson, BadRequestJson);
