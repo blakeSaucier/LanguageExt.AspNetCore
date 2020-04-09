@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using static LanguageExt.Prelude;
@@ -82,6 +83,36 @@ namespace LanguageExt.AspNetCore.Test
             Assert.IsInstanceOf(typeof(OkObjectResult), result);
             var okObjectResult = result as OkObjectResult;
             Assert.AreEqual(200, okObjectResult.StatusCode);
+        }
+
+        [Test]
+        public void OptionToJsonResult_OptionSome_ShouldBeOk()
+        {
+            // Arrange
+            var personDto = new PersonDto("James", "Test", 30);
+            var option = Optional(personDto);
+
+            // Act
+            var result = option.ToJsonResult();
+
+            // Assert
+            result.Should().BeOfType<JsonResult>();
+            (result as JsonResult).StatusCode.Should().Be(200);
+        }
+
+        [Test]
+        public async Task OptionTaskToJsonResult_OptionSome_ShouldBeOk()
+        {
+            // Arrange
+            var personDto = new PersonDto("James", "Test", 30);
+            var option = Optional(personDto).AsTask();
+
+            // Act
+            var result = await option.ToJsonResult();
+
+            // Assert
+            result.Should().BeOfType<JsonResult>();
+            (result as JsonResult).StatusCode.Should().Be(200);
         }
     }
 
