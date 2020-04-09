@@ -18,9 +18,9 @@ namespace LanguageExt.AspNetCore.Test
             var result = option.ToActionResult();
 
             // Assert
-            Assert.IsInstanceOf(typeof(OkObjectResult), result);
+            result.Should().BeOfType<OkObjectResult>();
             var okObjectResult = result as OkObjectResult;
-            Assert.AreEqual(200, okObjectResult.StatusCode);
+            okObjectResult.StatusCode.Should().Be(200);
         }
 
         [Test]
@@ -33,9 +33,9 @@ namespace LanguageExt.AspNetCore.Test
             var result = option.ToActionResult();
 
             // Assert
-            Assert.IsInstanceOf(typeof(NotFoundResult), result);
+            result.Should().BeOfType<NotFoundResult>();
             var notFoundResult = result as NotFoundResult;
-            Assert.AreEqual(404, notFoundResult.StatusCode);
+            notFoundResult.StatusCode.Should().Be(404);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace LanguageExt.AspNetCore.Test
             var result = await option.ToActionResult();
 
             // Assert
-            Assert.IsInstanceOf(typeof(OkObjectResult), result);
+            result.Should().BeOfType<OkObjectResult>();
             var okObjectResult = result as OkObjectResult;
             Assert.AreEqual(200, okObjectResult.StatusCode);
         }
@@ -64,7 +64,7 @@ namespace LanguageExt.AspNetCore.Test
             var result = await option.AsTask().ToActionResult();
 
             // Assert
-            Assert.IsInstanceOf(typeof(NotFoundResult), result);
+            result.Should().BeOfType<NotFoundResult>();
             var notFoundResult = result as NotFoundResult;
             Assert.AreEqual(404, notFoundResult.StatusCode);
         }
@@ -80,7 +80,7 @@ namespace LanguageExt.AspNetCore.Test
             var result = await option.ToActionResult();
 
             // Assert
-            Assert.IsInstanceOf(typeof(OkObjectResult), result);
+            result.Should().BeOfType<OkObjectResult>();
             var okObjectResult = result as OkObjectResult;
             Assert.AreEqual(200, okObjectResult.StatusCode);
         }
