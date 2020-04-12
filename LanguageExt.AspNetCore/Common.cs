@@ -23,17 +23,17 @@ namespace LanguageExt.AspNetCore
         
         internal static JsonResult BadRequestJson<E>(E e) => BadRequestJsonResult(e);
 
-        private static IActionResult OkResult<T>(T t) => new OkObjectResult(t);
+        static IActionResult OkResult<T>(T t) => new OkObjectResult(t);
 
-        private static JsonResult OkJsonResult<T>(T t) =>
+        static JsonResult OkJsonResult<T>(T t) =>
             new JsonResult(t) { StatusCode = StatusCodes.Status200OK };
         
-        private static JsonResult BadRequestJsonResult<E>(E e) =>
+        static JsonResult BadRequestJsonResult<E>(E e) =>
             new JsonResult(e) { StatusCode = StatusCodes.Status400BadRequest };
         
-        private static IActionResult Error() => new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        static IActionResult Error() => new StatusCodeResult(StatusCodes.Status500InternalServerError);
         
-        private static IActionResult Error<E>(E e) =>
+        static IActionResult Error<E>(E e) =>
             new ObjectResult(e) { StatusCode = StatusCodes.Status500InternalServerError };
     }
 }
