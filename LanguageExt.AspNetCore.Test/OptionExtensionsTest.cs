@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using System.Threading.Tasks;
@@ -19,8 +20,23 @@ namespace LanguageExt.AspNetCore.Test
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
-            var okObjectResult = result as OkObjectResult;
-            okObjectResult.StatusCode.Should().Be(200);
+            (result as OkObjectResult).StatusCode.Should().Be(200);
+        }
+
+        [Test]
+        public void OptionToResult_MapSome_ShouldBeOK()
+        {
+            // Arrange
+            var option = Optional(new PersonDto("James", "Test", 30));
+
+            // Act
+            var result = option.ToActionResult(
+                some: p => new CreatedResult("/people/", p),
+                none: () => new StatusCodeResult(StatusCodes.Status400BadRequest));
+
+            // Assert
+            result.Should().BeOfType<CreatedResult>();
+            (result as CreatedResult).StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
@@ -34,8 +50,7 @@ namespace LanguageExt.AspNetCore.Test
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
-            var notFoundResult = result as NotFoundResult;
-            notFoundResult.StatusCode.Should().Be(404);
+            (result as NotFoundResult).StatusCode.Should().Be(404);
         }
 
         [Test]
@@ -50,8 +65,7 @@ namespace LanguageExt.AspNetCore.Test
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
-            var okObjectResult = result as OkObjectResult;
-            Assert.AreEqual(200, okObjectResult.StatusCode);
+            (result as OkObjectResult).StatusCode.Should().Be(200);
         }
 
         [Test]
@@ -65,8 +79,22 @@ namespace LanguageExt.AspNetCore.Test
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
-            var notFoundResult = result as NotFoundResult;
-            Assert.AreEqual(404, notFoundResult.StatusCode);
+            (result as NotFoundResult).StatusCode.Should().Be(404);
+        }
+
+        [Test]
+        public async Task OptionTaskToResult_MapFail_ShouldProduceNotFound()
+        {
+            // Arrange
+            Option<PersonDto> option = None;
+
+            // Act
+            var result = await option.AsTask().ToActionResult(
+                none: () => new StatusCodeResult(StatusCodes.Status500InternalServerError));
+
+            // Assert
+            result.Should().BeOfType<StatusCodeResult>();
+            (result as StatusCodeResult).StatusCode.Should().Be(500);
         }
 
         [Test]
@@ -81,8 +109,24 @@ namespace LanguageExt.AspNetCore.Test
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
-            var okObjectResult = result as OkObjectResult;
-            Assert.AreEqual(200, okObjectResult.StatusCode);
+            (result as OkObjectResult).StatusCode.Should().Be(200);
+        }
+
+        [Test]
+        public async Task OptionAsyncToResult_MapSome_ShouldProduceOkResponse()
+        {
+            // Arrange
+            var personDto = new PersonDto("James", "Test", 30);
+            var option = OptionalAsync(Task.FromResult(personDto));
+
+            // Act
+            var result = await option.ToActionResult(
+                some: p => new CreatedResult("/people/30", p),
+                none: () => new StatusCodeResult(StatusCodes.Status500InternalServerError));
+
+            // Assert
+            result.Should().BeOfType<CreatedResult>();
+            (result as CreatedResult).StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test]
