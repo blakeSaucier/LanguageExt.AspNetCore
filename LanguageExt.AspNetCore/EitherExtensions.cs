@@ -51,7 +51,7 @@ namespace LanguageExt.AspNetCore
         /// <param name="either"></param>
         /// <returns></returns>
         public static Task<IActionResult> ToActionResult<L, R>(this Task<Either<L, R>> either, Func<L, IActionResult> left = null)
-            => either.Map(v => v.ToActionResult(left));
+            => either.Map(e => e.ToActionResult(left));
 
         /// <summary>
         /// By default, Right case is converted to 200 OK.
@@ -63,7 +63,7 @@ namespace LanguageExt.AspNetCore
         /// <param name="either"></param>
         /// <returns></returns>
         public static Task<IActionResult> ToActionResult<L, R>(this Task<Either<L, R>> either, Func<L, IActionResult> left = null, Func<R, IActionResult> right = null) =>
-            either.Map(v => v.ToActionResult(left, right));
+            either.Map(e => e.ToActionResult(left, right));
 
         /// <summary>
         /// Right case is converted to 200 OK.
@@ -75,5 +75,19 @@ namespace LanguageExt.AspNetCore
         /// <returns></returns>
         public static Task<IActionResult> ToActionResult<L, R>(this EitherAsync<L, R> either) =>
             either.Match(Ok, ServerError);
+
+        /// <summary>
+        /// By default, Right case is converted to 200 OK.
+        /// By default, Left case is returned as 500 server error.
+        /// Optionally provide functions to handle the Left and Right cases.
+        /// </summary>
+        /// <typeparam name="L"></typeparam>
+        /// <typeparam name="R"></typeparam>
+        /// <param name="either"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
+        public static Task<IActionResult> ToActionResult<L, R>(this EitherAsync<L, R> either, Func<L, IActionResult> left = null, Func<R, IActionResult> right = null) =>
+            either.Match(right ?? Ok, left ?? ServerError);
     }
 }
