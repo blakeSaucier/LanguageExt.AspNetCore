@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System;
 
 namespace LanguageExt.AspNetCore
 {
@@ -22,6 +23,16 @@ namespace LanguageExt.AspNetCore
         internal static JsonResult OkJson<T>(T t) => OkJsonResult(t);
         
         internal static JsonResult BadRequestJson<E>(E e) => BadRequestJsonResult(e);
+        
+        internal static IActionResult ServerErrorWithLogging(Exception e, Action<Exception> fail)
+        {
+            if (fail != null)
+            {
+                fail(e);
+                return ServerError();
+            }
+            return ServerError(e);
+        }
 
         static IActionResult OkResult<T>(T t) => new OkObjectResult(t);
 
