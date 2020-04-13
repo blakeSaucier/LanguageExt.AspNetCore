@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using static LanguageExt.Prelude;
 
@@ -34,6 +36,23 @@ namespace LanguageExt.AspNetCore.Test
             // Assert
             result.Should().BeOfType<ObjectResult>();
             (result as ObjectResult).StatusCode.Should().Be(500);
+        }
+
+        [Test]
+        public void TryFail_MapFailAction_ShouldBeServerError()
+        {
+            // Arrange
+            var spy = false;
+            var logging = act((Exception e) => { spy = true; });
+            var sut = Try(() => FailingCalculation(Writers));
+
+            // Act
+            var result = sut.ToActionResult(fail: logging);
+
+            // Assert
+            result.Should().BeOfType<StatusCodeResult>();
+            (result as StatusCodeResult).StatusCode.Should().Be(500);
+            spy.Should().BeTrue();
         }
 
         [Test]
@@ -90,6 +109,23 @@ namespace LanguageExt.AspNetCore.Test
             // Assert
             result.Should().BeOfType<ObjectResult>();
             (result as ObjectResult).StatusCode.Should().Be(500);
+        }
+
+        [Test]
+        public async Task TryAsyncFail_MapFailure_ShouldBeServerError()
+        {
+            // Arrange
+            var log = new StringBuilder();
+            var logger = act((Exception e) => log.AppendLine(e.Message));
+            var sut = TryAsync(() => FailingCalculation(Writers).AsTask());
+
+            // Act
+            var result = await sut.ToActionResult(fail: logger);
+
+            // Assert
+            result.Should().BeOfType<StatusCodeResult>();
+            (result as StatusCodeResult).StatusCode.Should().Be(500);
+            log.ToString().Should().Contain("Attempted to divide by zero");
         }
 
         private class Person
