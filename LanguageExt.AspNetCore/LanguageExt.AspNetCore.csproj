@@ -5,10 +5,10 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <PackageVersion>0.0.3</PackageVersion>
+    <PackageVersion>0.0.4</PackageVersion>
     <PackageId>LanguageExt.AspNetCore</PackageId>
     <Authors>James Saucier</Authors>
-    <PackageTags>C#, Functional, Language Extension, Monad, Option, Either, List, Set, Map, Tuple</PackageTags>
+    <PackageTags>C#, Functional, Language Extension, LanguageExt, AspNetCore, Monad, Option, Either, Try</PackageTags>
     <Summary>Useful extensions for LanguageExt with AspNetCore</Summary>
     <Description>Useful extensions for LanguageExt with AspNetCore</Description>
     
